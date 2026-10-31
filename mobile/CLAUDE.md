@@ -1,7 +1,20 @@
 # Mobile: React Native + Expo + TypeScript
 
-The developer already knows React and TypeScript well. Explain React Native / Expo-specific details
-(native modules, Reanimated worklets, Skia, EAS, platform differences), not React basics.
+## Working mode: build mode, NOT learning mode (overrides the root CLAUDE.md "learning mode")
+
+The developer is learning Java on the backend. On mobile they only care that it works and is well-built.
+- Work in **whole roadmap steps or larger** (e.g. all of 1.9 + 1.10 in one go). Skip concept briefs and "your turn" exercises.
+- Keep explanations to a short summary of what was built and how to see it in the simulator.
+- Still follow every convention below, still verify (`typecheck`, `lint`, `test`), and still tick the step in `docs/ROADMAP.md`.
+  Skip `LEARNING_LOG.md` for mobile steps.
+- **Stay inside `mobile/`.** Never edit `backend/`. It's being built in a separate session. If you need an endpoint that doesn't exist
+  yet, build against a typed mock in `src/api/mocks/` that matches the planned shape in `docs/ARCHITECTURE.md` / `docs/DATA_MODEL.md`,
+  then swap it out once the endpoint and OpenAPI spec exist. Write down any API needs or contract questions in `docs/API_REQUESTS.md`
+  so the backend session can pick them up.
+- Never commit or push. Suggest a `mobile: ...` commit message.
+
+The developer already knows React and TypeScript well. If something RN-specific matters (native modules, dev builds, EAS),
+mention it in one line.
 
 ## Commands
 

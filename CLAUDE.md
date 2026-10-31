@@ -19,6 +19,9 @@ Design rationale lives in `docs/ARCHITECTURE.md` and `docs/DATA_MODEL.md`. Updat
 
 ## How we work: learning mode (important)
 
+> Learning mode applies to **backend/** only. Mobile work uses "build mode" (see `mobile/CLAUDE.md`).
+> Backend and mobile may be worked on in parallel Claude sessions, so each session stays in its own directory.
+
 The developer is an experienced engineer (Go, Node.js, TypeScript, React, PostgreSQL)
 **learning professional Java + Spring Boot** with this project. React/TS needs less explanation; Java/Spring needs more.
 
