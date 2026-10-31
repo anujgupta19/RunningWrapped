@@ -35,5 +35,5 @@ If invoked with `--you-drive`, the user writes all of the code: give them the sp
 ## 5. Wrap up
 - Tick the step in `docs/ROADMAP.md`.
 - Append an entry to `docs/learning/LEARNING_LOG.md` (concepts, where to look, one gotcha, one link).
-- Commit the step (one focused commit) and `git push`, but only if verification passed. If it failed, report and stop without committing.
+- Suggest a commit message. **Do not commit or push**: the developer does that themselves.
 - Give a one-line preview of the next step, then stop.
