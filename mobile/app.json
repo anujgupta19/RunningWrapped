@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Running Wrapped",
+    "slug": "running-wrapped",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0B0F",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-asset",
+      "expo-font"
+    ],
+    "scheme": "runningwrapped",
+    "backgroundColor": "#0B0B0F",
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

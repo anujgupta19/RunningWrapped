@@ -29,9 +29,9 @@ Legend: 🧑‍💻 = good "your turn" candidate (you write it, Claude reviews)
   *Learn:* how annotations become docs, logging config, testability via injected time.
 
 ### Mobile
-- [ ] **1.9 Expo app skeleton.** `create-expo-app` (TS), strict tsconfig, `@/` alias, ESLint/Prettier, 5-tab Expo Router layout with placeholder screens.
+- [x] **1.9 Expo app skeleton.** `create-expo-app` (TS), strict tsconfig, `@/` alias, ESLint/Prettier, 5-tab Expo Router layout with placeholder screens.
   *Learn:* Expo Router file conventions, Expo Go vs dev builds.
-- [ ] **1.10 Design system base.** NativeWind setup, dark-first tokens (colors, gradients, spacing, type), `Screen`, `Text`, `Card`, `StatTile` primitives.
+- [x] **1.10 Design system base.** NativeWind setup, dark-first tokens (colors, gradients, spacing, type), `Screen`, `Text`, `Card`, `StatTile` primitives.
 - [ ] **1.11 Talk to the backend.** `openapi-typescript` codegen, typed fetch client, TanStack Query, Profile screen shows `/users/me`.
   *Learn:* simulator ↔ localhost networking, `EXPO_PUBLIC_*` env.
 
