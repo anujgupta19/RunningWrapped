@@ -15,10 +15,10 @@ Legend: 🧑‍💻 = good "your turn" candidate (you write it, Claude reviews)
   *Learn:* `pom.xml` vs `go.mod`/`package.json`, starters, auto-configuration, `@SpringBootApplication`, the bean container.
 - [x] **1.2 Postgres + config.** `compose.yaml`, `dev`/`prod` profiles, Spring Boot docker-compose support, Testcontainers for tests.
   *Learn:* externalized config, profiles, property precedence, ConnectionDetails. (`@ConfigurationProperties` records moved to 1.12, when we have our own config: JWT.)
-- [ ] **1.3 Flyway + first migration.** `V1__create_app_user.sql`, `ddl-auto=validate`.
+- [x] **1.3 Flyway + first migration.** `V1__create_app_user.sql` + schema tests. (`ddl-auto=validate` moves to 1.4, when JPA arrives.)
   *Learn:* how Flyway runs at startup, migration discipline.
 - [ ] **1.4 User entity + repository + first test.** `AppUser` entity, `UserRepository`, `@DataJpaTest` with Testcontainers. 🧑‍💻 (repository test)
-  *Learn:* JPA entities, persistence context / dirty checking, Spring Data derived queries, Testcontainers `@ServiceConnection`.
+  *Learn:* `ddl-auto=validate`, JPA entities, persistence context / dirty checking, Spring Data derived queries, Testcontainers `@ServiceConnection`.
 - [ ] **1.5 First endpoint.** `GET /api/v1/users/me` (temporary dev-user resolver), `UserResponse` record, `UserService`, controller, `@WebMvcTest`. 🧑‍💻 (DTO + mapping)
   *Learn:* DI with constructors, layer responsibilities, records, Jackson serialization, `@Transactional(readOnly = true)`.
 - [ ] **1.6 Validation + error handling.** `PATCH /api/v1/users/me` with `@Valid` request record; global `@RestControllerAdvice` → `ProblemDetail`.

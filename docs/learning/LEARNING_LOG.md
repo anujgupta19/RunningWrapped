@@ -54,3 +54,25 @@ Written so you can reread it in six months and remember *why*.
 Classpath presence turns features on, so tests needed a database too. Ports 8080 and 5432 were taken locally, so we use 8081 and 5433.
 
 **Further reading:** https://docs.spring.io/spring-boot/reference/features/external-config.html
+
+## 1.3: Flyway + first migration (2026-10-31)
+**Concepts:**
+- **Flyway runs at app startup**, before the app accepts traffic. Auto-config sees Flyway + a DataSource on the classpath,
+  scans `classpath:db/migration`, and applies pending `V{n}__{description}.sql` files in version order. Like golang-migrate's
+  `m.Up()` in `main()`, except it's automatic.
+- **`flyway_schema_history`** records each applied version + checksum. **Editing an applied migration changes its checksum
+  and startup fails** (`validate` step). Fix forward with a new `V{n+1}` migration.
+- **Tests run the real migrations** against Testcontainers Postgres, so the schema under test is exactly what prod gets.
+- **`@Transactional` on a test class** rolls back each test method's changes. (In app code it commits. Tests flip the default.)
+- **Spring context caching:** test classes with the same config share one application context (and one container),
+  which is why the second test class started in ~6 ms.
+- **`DataIntegrityViolationException`:** Spring translates driver-specific SQL errors (SQLState 23505 etc.) into a
+  portable exception hierarchy. We'll map it to a 409 Conflict later.
+
+**Where to look:** `backend/src/main/resources/db/migration/V1__create_app_user.sql`, `backend/src/test/java/com/runningwrapped/DatabaseMigrationTests.java`
+
+**Gotcha / aha:** Field injection (`@Autowired JdbcTemplate jdbc`) is fine *in tests*, since JUnit creates test instances, not Spring.
+App code still uses constructor injection only. `user` is reserved in Postgres, hence `app_user`.
+Inspect the dev DB with `docker compose exec postgres psql -U runningwrapped`.
+
+**Further reading:** https://documentation.red-gate.com/flyway/flyway-concepts/migrations
