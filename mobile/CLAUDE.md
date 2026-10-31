@@ -59,7 +59,7 @@ mobile/
 
 ## Gotchas
 
-- iOS simulator can reach the backend at `http://localhost:8080`. A physical device needs your machine's LAN IP. Configure via
+- iOS simulator can reach the backend at `http://localhost:8081` (dev port). A physical device needs your machine's LAN IP. Configure via
   `EXPO_PUBLIC_API_URL` (`EXPO_PUBLIC_*` vars are bundled into the app, so **never** put secrets there).
 - Expo Go can't load custom native modules. Once we add any, use a development build (`npx expo run:ios` or EAS).
 

@@ -92,7 +92,7 @@ and the API returns the sample size and caveats with every comparison so the UI 
 
 | Concern | Choice |
 |---|---|
-| Local DB | `docker compose` Postgres. Spring Boot's docker-compose support starts it on `spring-boot:run` |
+| Local DB | `compose.yaml` Postgres 18 (host port 5433). Spring Boot docker-compose support starts it on `spring-boot:run` |
 | Tests | Testcontainers Postgres (real DB, no H2) |
 | Backend image | Multi-stage Dockerfile (or `spring-boot:build-image`) |
 | Hosting | Railway: backend service + managed Postgres |

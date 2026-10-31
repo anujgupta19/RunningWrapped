@@ -8,8 +8,10 @@ Spotify-Wrapped-style recaps and progress analytics for runners: import your FIT
 
 ## Run the backend
 
+Requires Java 21 and Docker. Postgres starts automatically from `compose.yaml`.
+
 ```bash
 cd backend
-./mvnw spring-boot:run
-curl localhost:8080/actuator/health
+./mvnw spring-boot:run              # dev profile, port 8081
+curl localhost:8081/actuator/health
 ```

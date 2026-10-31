@@ -1,0 +1,22 @@
+# Local development infrastructure.
+# Started automatically by `./mvnw spring-boot:run` (Spring Boot docker-compose support),
+# or manually with `docker compose up -d`.
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: runningwrapped
+      POSTGRES_USER: runningwrapped
+      POSTGRES_PASSWORD: runningwrapped # local dev only
+    ports:
+      - "5433:5432" # 5432 on the host is used by another project
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U runningwrapped -d runningwrapped"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  postgres-data:

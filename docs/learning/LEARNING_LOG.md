@@ -33,3 +33,24 @@ Written so you can reread it in six months and remember *why*.
   with no code change. That's Spring's externalized config precedence at work (more in 1.2).
 
 **Further reading:** https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+
+## 1.2: Postgres + config profiles (2026-10-31)
+**Concepts:**
+- **Externalized config.** One app binary, config from layered sources. Higher in this list wins:
+  command-line args > env vars (`SPRING_DATASOURCE_URL`, via relaxed binding) > `application-{profile}.yaml` > `application.yaml`.
+  It's like viper/dotenv layering in Go, but built in.
+- **Profiles.** `application-dev.yaml` and `application-prod.yaml` only load when that profile is active. Activate with
+  `--spring.profiles.active=prod` or `SPRING_PROFILES_ACTIVE=prod`. The Maven plugin sets `dev` for `spring-boot:run`.
+- **`${DB_URL}` placeholders** in yaml are resolved from env vars. Without a default (`${PORT:8080}` has one), startup fails fast.
+- **ConnectionDetails.** Spring Boot's docker-compose support (dev) and Testcontainers `@ServiceConnection` (tests) both
+  produce a `JdbcConnectionDetails` bean that *beats* `spring.datasource.*`. That's why dev and test configs have no URL/password.
+- **Dependency scopes:** `runtime` (needed to run, not to compile, e.g. the JDBC driver, since we code against `javax.sql.DataSource`),
+  `test` (test classpath only), `optional` (not passed on, and the Boot plugin leaves docker-compose out of the prod jar).
+- **`@TestConfiguration` + `@Import`** adds test-only beans (the Postgres container) to the test's application context.
+
+**Where to look:** `compose.yaml`, `backend/src/main/resources/application*.yaml`, `backend/src/test/java/com/runningwrapped/TestcontainersConfiguration.java`
+
+**Gotcha / aha:** Adding `spring-boot-starter-jdbc` alone breaks `contextLoads()`, because auto-config now *requires* a DataSource.
+Classpath presence turns features on, so tests needed a database too. Ports 8080 and 5432 were taken locally, so we use 8081 and 5433.
+
+**Further reading:** https://docs.spring.io/spring-boot/reference/features/external-config.html

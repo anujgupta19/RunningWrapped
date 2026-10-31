@@ -1,0 +1,18 @@
+# Local development. Activated by `./mvnw spring-boot:run` (see spring-boot-maven-plugin in pom.xml).
+server:
+  port: 8081 # 8080 is used by another local project
+
+spring:
+  docker:
+    compose:
+      # Run from backend/, compose file lives at the repo root.
+      file: ../compose.yaml
+      # Start Postgres if needed, but leave it running when the app stops (faster restarts).
+      lifecycle-management: start-only
+  # No spring.datasource.* here: docker-compose support reads the URL, user and password
+  # straight from compose.yaml and wires the DataSource for us.
+
+management:
+  endpoint:
+    health:
+      show-details: always # shows the "db" component in /actuator/health

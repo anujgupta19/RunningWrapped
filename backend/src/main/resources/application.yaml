@@ -1,3 +1,4 @@
+# Shared config for every environment. Profile files (application-{profile}.yaml) override these values.
 spring:
   application:
     name: running-wrapped

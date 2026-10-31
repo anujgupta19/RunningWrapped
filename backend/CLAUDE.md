@@ -5,8 +5,8 @@ Learning context: the developer knows Go/Node well and is learning Java/Spring. 
 ## Commands
 
 ```bash
-./mvnw spring-boot:run          # run locally (dev profile; starts Postgres via docker compose)
-./mvnw test                     # unit + slice tests
+./mvnw spring-boot:run          # run locally on :8081 (dev profile; starts Postgres from ../compose.yaml on :5433)
+./mvnw test                     # all tests (Testcontainers starts its own Postgres, needs Docker)
 ./mvnw verify                   # full build incl. integration tests (needs Docker for Testcontainers)
 ./mvnw spotless:apply           # format (once Spotless is added)
 ```

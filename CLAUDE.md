@@ -11,7 +11,7 @@ backend/   Java 21 + Spring Boot modular monolith (Maven)      → see backend/C
 mobile/    React Native + Expo + TypeScript (Expo Router)       → see mobile/CLAUDE.md
 docs/      ARCHITECTURE.md, DATA_MODEL.md, ROADMAP.md, learning/
 .claude/skills/   project workflows (/milestone, /explain, /spring-feature, /rn-screen, /java-review)
-docker-compose.yml   local Postgres (added in milestone 1.2)
+compose.yaml         local Postgres 18 on host port 5433 (auto-started by spring-boot:run)
 ```
 
 Source of truth for *what we're building next* is `docs/ROADMAP.md`.

@@ -13,8 +13,8 @@ Legend: 🧑‍💻 = good "your turn" candidate (you write it, Claude reviews)
 ### Backend
 - [x] **1.1 Spring Boot skeleton.** Generate via Spring Initializr (Maven, Java 21, Web, Actuator), Maven wrapper, run it, hit `/actuator/health`.
   *Learn:* `pom.xml` vs `go.mod`/`package.json`, starters, auto-configuration, `@SpringBootApplication`, the bean container.
-- [ ] **1.2 Postgres + config.** `docker-compose.yml`, datasource, `application.yaml` + `dev`/`test` profiles, Spring Boot docker-compose support.
-  *Learn:* externalized config, profiles, property precedence, `@ConfigurationProperties` records.
+- [x] **1.2 Postgres + config.** `compose.yaml`, `dev`/`prod` profiles, Spring Boot docker-compose support, Testcontainers for tests.
+  *Learn:* externalized config, profiles, property precedence, ConnectionDetails. (`@ConfigurationProperties` records moved to 1.12, when we have our own config: JWT.)
 - [ ] **1.3 Flyway + first migration.** `V1__create_app_user.sql`, `ddl-auto=validate`.
   *Learn:* how Flyway runs at startup, migration discipline.
 - [ ] **1.4 User entity + repository + first test.** `AppUser` entity, `UserRepository`, `@DataJpaTest` with Testcontainers. 🧑‍💻 (repository test)

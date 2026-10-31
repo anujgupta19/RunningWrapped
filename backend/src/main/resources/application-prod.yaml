@@ -1,0 +1,10 @@
+# Production (Railway). Every secret comes from an environment variable. There are no defaults,
+# so a missing variable fails startup instead of silently connecting to the wrong place.
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
