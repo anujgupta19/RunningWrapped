@@ -99,3 +99,29 @@ Inspect the dev DB with `docker compose exec postgres psql -U runningwrapped`.
 - Derived `findByEmailIgnoreCase` generates `upper(email) = upper(?)`, which can't use our `lower(email)` index, hence the hand-written `@Query`.
 
 **Further reading:** https://vladmihalcea.com/a-beginners-guide-to-jpa-hibernate-flush-strategies/
+
+## 1.5: First endpoint, GET /api/v1/users/me (2026-10-31)
+**Concepts:**
+- **Constructor injection:** `UserController(UserService)` → `UserService(UserRepository)`. Spring builds the graph at startup by
+  reading constructors, the same thing you'd write by hand in `main.go`. One constructor means no `@Autowired` needed. `final` fields.
+- **Stereotypes:** `@RestController`, `@Service`, `@Component` mark classes for component scanning → they become singleton *beans*.
+- **Layers:** controller (HTTP only) → service (transaction + mapping) → repository. The entity never leaves the service. The
+  controller gets a `UserResponse` record.
+- **Records as DTOs** + static `from(entity)` factory. Jackson serializes record components directly. Boot 4 uses Jackson 3,
+  which writes `Instant` as ISO-8601 strings by default.
+- **`@Transactional(readOnly = true)`:** Spring wraps the bean in a proxy that opens/commits the transaction around the call.
+  Verified via `JpaTransactionManager` DEBUG logs that it applies to our *package-private* method (Spring 6+ supports this for class proxies).
+- **`@ResponseStatus` on an exception** maps it to an HTTP status (temporary, replaced by central handling in 1.6).
+- **`@Profile("dev")` + `ApplicationRunner`:** a bean that exists only in dev and runs once after startup (the dev-user seeder).
+- **`@WebMvcTest` + `@MockitoBean` + `MockMvcTester`:** web slice with no DB. The service is replaced by a Mockito mock
+  (`given(...).willReturn(...)` ≈ `jest.fn().mockReturnValue`), and the AssertJ-style MockMvc asserts on status + JSON paths.
+
+**Where to look:** `backend/src/main/java/com/runningwrapped/users/{UserController,UserService,UserResponse,DevUserSeeder}.java`,
+`backend/src/test/java/com/runningwrapped/users/UserControllerTests.java`
+
+**Gotcha / aha:**
+- Missing or malformed `X-User-Id` → 400 automatically: Spring converts header strings to `UUID` and rejects bad input before our code runs.
+- Error bodies are still Boot's default `{timestamp,status,error,path}` shape. Step 1.6 switches to RFC 9457 ProblemDetail.
+- Mockito now loads as a `-javaagent` via Surefire (pom.xml), because self-attaching agents are being phased out of the JDK.
+
+**Further reading:** https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html

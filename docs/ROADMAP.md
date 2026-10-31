@@ -19,7 +19,7 @@ Legend: 🧑‍💻 = good "your turn" candidate (you write it, Claude reviews)
   *Learn:* how Flyway runs at startup, migration discipline.
 - [x] **1.4 User entity + repository + first test.** `AppUser` entity, `UserRepository`, `@DataJpaTest` with Testcontainers. 🧑‍💻 (repository test)
   *Learn:* `ddl-auto=validate`, JPA entities, persistence context / dirty checking, Spring Data derived queries, Testcontainers `@ServiceConnection`.
-- [ ] **1.5 First endpoint.** `GET /api/v1/users/me` (temporary dev-user resolver), `UserResponse` record, `UserService`, controller, `@WebMvcTest`. 🧑‍💻 (DTO + mapping)
+- [x] **1.5 First endpoint.** `GET /api/v1/users/me` (temporary dev-user resolver), `UserResponse` record, `UserService`, controller, `@WebMvcTest`. 🧑‍💻 (DTO + mapping)
   *Learn:* DI with constructors, layer responsibilities, records, Jackson serialization, `@Transactional(readOnly = true)`.
 - [ ] **1.6 Validation + error handling.** `PATCH /api/v1/users/me` with `@Valid` request record; global `@RestControllerAdvice` → `ProblemDetail`.
   *Learn:* Bean Validation, exception hierarchy, RFC 9457, why checked vs unchecked exceptions.
