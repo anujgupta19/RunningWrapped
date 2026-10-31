@@ -1,6 +1,7 @@
 package com.runningwrapped.users;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.DayOfWeek;
 import java.time.ZoneId;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.runningwrapped.TestcontainersConfiguration;
 
@@ -45,6 +47,31 @@ class UserRepositoryTests {
 		assertThat(loaded.getCreatedAt()).isNotNull();
 	}
 
-	// 🧑‍💻 Your turn: tests for UserRepository.findByEmail. See docs/ROADMAP.md step 1.4.
+	@Test
+	void findsUserByEmailIgnoringCase() {
+		var saved = users.saveAndFlush(new AppUser("Runner@Example.com", "{noop}hash"));
+		entityManager.clear();
+
+		var found = users.findByEmail("runner@EXAMPLE.com");
+
+		assertThat(found).hasValueSatisfying(user -> assertThat(user.getId()).isEqualTo(saved.getId()));
+	}
+
+	@Test
+	void returnsEmptyForUnknownEmail() {
+		users.saveAndFlush(new AppUser("runner@example.com", "{noop}hash"));
+
+		assertThat(users.findByEmail("nobody@example.com")).isEmpty();
+	}
+
+	@Test
+	void rejectsDuplicateEmailDifferingOnlyInCase() {
+		users.saveAndFlush(new AppUser("runner@example.com", "{noop}hash"));
+
+		// saveAndFlush, not save: save() only queues the INSERT in the persistence context, so the
+		// unique-index violation wouldn't surface until commit, which never happens in a rolled-back test.
+		assertThatThrownBy(() -> users.saveAndFlush(new AppUser("RUNNER@example.com", "{noop}hash")))
+				.isInstanceOf(DataIntegrityViolationException.class);
+	}
 
 }

@@ -17,7 +17,7 @@ Legend: 🧑‍💻 = good "your turn" candidate (you write it, Claude reviews)
   *Learn:* externalized config, profiles, property precedence, ConnectionDetails. (`@ConfigurationProperties` records moved to 1.12, when we have our own config: JWT.)
 - [x] **1.3 Flyway + first migration.** `V1__create_app_user.sql` + schema tests. (`ddl-auto=validate` moves to 1.4, when JPA arrives.)
   *Learn:* how Flyway runs at startup, migration discipline.
-- [ ] **1.4 User entity + repository + first test.** `AppUser` entity, `UserRepository`, `@DataJpaTest` with Testcontainers. 🧑‍💻 (repository test)
+- [x] **1.4 User entity + repository + first test.** `AppUser` entity, `UserRepository`, `@DataJpaTest` with Testcontainers. 🧑‍💻 (repository test)
   *Learn:* `ddl-auto=validate`, JPA entities, persistence context / dirty checking, Spring Data derived queries, Testcontainers `@ServiceConnection`.
 - [ ] **1.5 First endpoint.** `GET /api/v1/users/me` (temporary dev-user resolver), `UserResponse` record, `UserService`, controller, `@WebMvcTest`. 🧑‍💻 (DTO + mapping)
   *Learn:* DI with constructors, layer responsibilities, records, Jackson serialization, `@Transactional(readOnly = true)`.

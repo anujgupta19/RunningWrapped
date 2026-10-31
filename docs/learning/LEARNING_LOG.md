@@ -76,3 +76,26 @@ App code still uses constructor injection only. `user` is reserved in Postgres, 
 Inspect the dev DB with `docker compose exec postgres psql -U runningwrapped`.
 
 **Further reading:** https://documentation.red-gate.com/flyway/flyway-concepts/migrations
+
+## 1.4: AppUser entity + UserRepository (2026-10-31)
+**Concepts:**
+- **Entity anatomy:** `@Entity` class, `protected` no-arg constructor (for Hibernate's reflection), a real constructor for
+  required fields, getters, no blanket setters. Field names map to snake_case columns automatically.
+- **`ddl-auto: validate`:** Hibernate checks every entity against the Flyway-created schema at startup and refuses to boot on mismatch.
+- **Java defaults must mirror SQL defaults:** Hibernate's INSERT lists every column, so `default 'MILES'` in SQL never fires.
+- **`@Enumerated(EnumType.STRING)`** always. The default (ORDINAL) stores 0/1 and silently corrupts data if you reorder the enum.
+- **Spring Data repositories:** an interface → Spring generates the implementation at startup (`save`, `findById`, ...).
+  Derived queries come from method names. `@Query` (JPQL: class/field names, not tables) when you need control.
+- **Persistence context (first-level cache):** within a transaction Hibernate tracks loaded entities and **delays writes until flush**.
+  `save()` queues an INSERT. `saveAndFlush()`/commit sends it. `entityManager.clear()` forces the next read to hit the DB.
+- **`@DataJpaTest`** = a "slice": only JPA + Flyway + DataSource. Fast, each test rolled back.
+- **Package-private entity + repository** keep `users` internals invisible to other features (enforced by the compiler).
+
+**Where to look:** `backend/src/main/java/com/runningwrapped/users/`, `backend/src/test/java/com/runningwrapped/users/UserRepositoryTests.java`
+
+**Gotcha / aha:**
+- Swapping `saveAndFlush` for `save` in `rejectsDuplicateEmailDifferingOnlyInCase` makes it fail ("Expecting code to raise a
+  throwable"): the duplicate INSERT never reached Postgres because the rolled-back test never flushed.
+- Derived `findByEmailIgnoreCase` generates `upper(email) = upper(?)`, which can't use our `lower(email)` index, hence the hand-written `@Query`.
+
+**Further reading:** https://vladmihalcea.com/a-beginners-guide-to-jpa-hibernate-flush-strategies/
