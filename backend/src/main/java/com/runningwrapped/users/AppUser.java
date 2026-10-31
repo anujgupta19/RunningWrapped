@@ -63,6 +63,25 @@ class AppUser {
 		this.passwordHash = passwordHash;
 	}
 
+	/**
+	 * Applies a partial update: null arguments leave the field unchanged, and an empty display name clears it. No setters
+	 * on purpose. Changes go through methods that state the intent and keep the rules in one place.
+	 */
+	void updatePreferences(String displayName, Units preferredUnits, ZoneId timezone, DayOfWeek weekStart) {
+		if (displayName != null) {
+			this.displayName = displayName.isEmpty() ? null : displayName.strip();
+		}
+		if (preferredUnits != null) {
+			this.preferredUnits = preferredUnits;
+		}
+		if (timezone != null) {
+			this.timezone = timezone;
+		}
+		if (weekStart != null) {
+			this.weekStart = weekStart;
+		}
+	}
+
 	UUID getId() {
 		return id;
 	}

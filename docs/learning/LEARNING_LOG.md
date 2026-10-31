@@ -125,3 +125,31 @@ Inspect the dev DB with `docker compose exec postgres psql -U runningwrapped`.
 - Mockito now loads as a `-javaagent` via Surefire (pom.xml), because self-attaching agents are being phased out of the JDK.
 
 **Further reading:** https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+
+## 1.6: Validation + Problem Details errors (2026-10-31)
+**Concepts:**
+- **Bean Validation:** constraints are annotations on the request record (`@Size`, `@Pattern`), and `@Valid @RequestBody` runs them
+  before the controller method. Failure → `MethodArgumentNotValidException`. Like zod, but declared on the type. Constraints treat
+  `null` as valid, which is exactly what PATCH needs.
+- **PATCH rule:** `null`/absent = unchanged, `""` clears `displayName`. Records can't tell absent from `null`. JSON Merge Patch
+  (`JsonNullable`) can, but only one of our fields is clearable, so it isn't worth a library.
+- **Deserialization vs validation:** `"timezone": "Mars/Olympus"` fails while Jackson is building the `ZoneId` (`HttpMessageNotReadableException`),
+  before validation runs. Typed fields (`ZoneId`, enums) give you validation for free.
+- **`@RestControllerAdvice` + `ResponseEntityExceptionHandler`:** one place that turns exceptions into RFC 9457 `ProblemDetail`.
+  The base class already covers ~15 Spring MVC errors. We add field `errors`, a 404 for `NotFoundException`, and a generic 500.
+  Spring picks the **most specific** matching `@ExceptionHandler`, so the `Exception` catch-all only catches true surprises.
+- **Exception hierarchy:** abstract `common.NotFoundException` → `UserNotFoundException`. It's mapped once and every feature reuses it.
+  Unchecked, because no caller can handle it, and `throws` clauses through every layer would just be noise.
+- **Dirty checking for real:** `updateUser` loads the entity, calls `updatePreferences(...)`, and returns. There's no `save()`.
+  Hibernate diffs against the loaded snapshot and issues the UPDATE at commit.
+- **Domain method instead of setters:** `AppUser.updatePreferences` keeps the PATCH rules in one place.
+- **`@DataJpaTest` + `@Import(UserService.class)`:** a slice plus exactly the beans you need. Inside a test transaction, call
+  `flush()` + `clear()` to force the UPDATE and a fresh read.
+
+**Where to look:** `backend/src/main/java/com/runningwrapped/common/`, `users/{UpdateUserRequest,UserService,AppUser}.java`,
+`backend/src/test/java/com/runningwrapped/users/{UserControllerTests,UserServiceTests}.java`
+
+**Gotcha / aha:** The 500 handler must never return `ex.getMessage()`. The test throws "connection to db-internal:5432 refused" and asserts
+it doesn't leak. Domain exception messages *are* sent to clients, so keep them free of health data.
+
+**Further reading:** https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html

@@ -21,7 +21,7 @@ Legend: 🧑‍💻 = good "your turn" candidate (you write it, Claude reviews)
   *Learn:* `ddl-auto=validate`, JPA entities, persistence context / dirty checking, Spring Data derived queries, Testcontainers `@ServiceConnection`.
 - [x] **1.5 First endpoint.** `GET /api/v1/users/me` (temporary dev-user resolver), `UserResponse` record, `UserService`, controller, `@WebMvcTest`. 🧑‍💻 (DTO + mapping)
   *Learn:* DI with constructors, layer responsibilities, records, Jackson serialization, `@Transactional(readOnly = true)`.
-- [ ] **1.6 Validation + error handling.** `PATCH /api/v1/users/me` with `@Valid` request record; global `@RestControllerAdvice` → `ProblemDetail`.
+- [x] **1.6 Validation + error handling.** `PATCH /api/v1/users/me` with `@Valid` request record; global `@RestControllerAdvice` → `ProblemDetail`.
   *Learn:* Bean Validation, exception hierarchy, RFC 9457, why checked vs unchecked exceptions.
 - [ ] **1.7 Activity + import schema.** Migrations + entities for `activity_import`, `activity`, `activity_best_effort`, with indexes. 🧑‍💻 (one migration)
   *Learn:* `@ManyToOne(LAZY)`, enums with `@Enumerated(STRING)`, partial unique indexes, why we avoid bidirectional mappings.
