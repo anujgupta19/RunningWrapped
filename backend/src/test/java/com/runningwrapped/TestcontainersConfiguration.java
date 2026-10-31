@@ -11,7 +11,7 @@ import org.testcontainers.utility.DockerImageName;
  * build the DataSource from this container's random port and credentials, so no test config is needed.
  */
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
 	@Bean
 	@ServiceConnection
